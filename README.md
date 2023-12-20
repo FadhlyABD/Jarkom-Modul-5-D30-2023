@@ -20,20 +20,20 @@ Topologi yang digunakan untuk praktikum modul 5 adalah sebagai berikut.
 Untuk melakukan subneting pada praktikum 5 ini kita menggunakan metode VLSM 
 Berikut adalah topologi pengelompokan subnet :
 
-<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/Images/ss1.jpg" width = "400"/> 
+<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/ss1.jpg" width = "400"/> 
 
 
 Setelah kita membuat pengelompokan subnet selanjutnya kita buat tabel pengelompokan subnet : 
 
-<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/Images/ss2.jpg" width = "400"/> 
+<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/ss2.jpg" width = "400"/> 
 
 berikut adalah tree hasil perhitungan menggunaakan metode VLSM 
 
-<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/Images/ss3.jpg" width = "400"/> 
+<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/ss3.png" width = "400"/> 
 
 Setelah melakukan perhitungan dan membuat tree maka didapatkan hasil ip yaittu sebagai berikut : 
 
-<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/Images/ss4.jpg" width = "400"/> 
+<img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/ss4.png" width = "400"/> 
 
 ## Routing 
 sebelum kita melakukan routing kia melakukan IP configuration dulu di gns3 yang telah kita buat berikut adalah configurasinya : 
