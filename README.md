@@ -14,134 +14,118 @@ Topologi yang digunakan untuk praktikum modul 5 adalah sebagai berikut.
 | -------------------------------------------- |
 | <img src="https://github.com/FadhlyABD/Jarkom-Modul-5-D30-2023/blob/main/Images/topo5.jpg" width = "400"/> |
 
-## Subnet
-![Alt text](Images/netmask.png)
+## Nomor 4
+Lakukan pembatasan sehingga koneksi SSH pada Web Server hanya dapat dilakukan oleh masyarakat yang berada pada GrobeForest.
 
+**Penyelesaian**
+  - Sein & Stark (Web Server)
+```bash
+iptables -A INPUT -p tcp --dport 22 -s 192.182.4.0/22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j DROP
+```
 
-## Variable Length Subnet Masking (VLSM)
-Pada sesi ini kita akan membuat topologi kita pada Cisco Packet Tracer (CPT). Setelah membuat topologi, yang pertama kita lakukan selanjutnya adalah melakukan perhitungan untuk subnetting. Berikut langkah-langkahnya.
+**Hasil**
 
-### Subnetting
-- Lakukan pembagian untuk jumlah subnet yang ada pada topologi yang telah dibuat dan akan didapatkan pembagiannya sebagai berikut.
-![Alt text](Images/subnet.png)
-- Lakukan perhitungan terhadap jumah IP pada tiap-tiap subnet yang telah dibagi.
-![Alt text](Images/rute.jpg)
-- Buat sebuah tree yang merepresentasikan pembagian IP dengan metode VLSM dari tiap-tiap subnet sebagaimana berikut.
-![Alt text](Images/vlsmtree.png)
+https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/92865110/9b49c79a-005d-4c91-a52d-65bd64e8c03c
 
-**Penjelasan:**
-- Pada pembagian subnet tercatat total IP adalah 4255 dan netmask yang cukup menampungnya adalah `/19` (menampung 8190 IP).
-- Sehingga root dari tree memiliki netmask `/19` dengan IP yang dimulai dari `192.206.0.0`.
-- Left child dari tree akan selalu menunjukkan awal mula dari ip yang tersedia, sedangkan right child adalah IP setelah IO left child.
-- Iterasi dilakukan terus menerus mulai dari netmask `/19` hingga `/30`.
-- Sehingga pada akhirnya diperoleh pembagian IP dari tree VLSM tersebut sebagai berikut.
-![Alt text](Images/ipvlsm.jpg)
+## Nomor 5
+Selain itu, akses menuju WebServer hanya diperbolehkan saat jam kerja yaitu Senin-Jumat pada pukul 08.00-16.00.
 
-- Langkah selanjutnya adalah melakukan config pada tiap node di CPT berdasarkan IP dan subnet yang telah didapatkan sebelumnya
-- Untuk isi config pembagian IP akan diset seperti ini:
-  * Router memliki `IP NID + 1`
-  * Host / Client memiliki `IP Rourter + 1` atau `IP Client sesubnet + 1`
-  * Host / Client memiliki gateway sesuai IP router dalam subnet mereka
-  * 1 router bisa memiliki beberapa IP karena dalam 1 router dapat menangani beberapa ethernet interface / subnet
-- Berikut adalah contoh, jika sudah selesai melakukan config maka akan muncul konfigurasi ketika node dihover.
-  1. Aura (Router)
-     ![Alt text](Images/auracpt.png)
-  2. Frieren (Router)
-     ![Alt text](Images/frierencpt.png)
-  3. Flamme (Router)
-     ![Alt text](Images/flammecpt.png)
-  4. Eisen (Router)
-     ![Alt text](Images/eisencpt.png)
-  5. GranzChannel (Client)
-     ![Alt text](Images/granzcpt.png)
-- Begitu juga untuk node yang lain menyocokkan dengan pembagian IP yang sudah dibagi sebelumnya.
+**Penyelesaian**
+  - Sein & Stark (Web Server)
+```bash
+# Izinkan akses ke Web Server pada senin-jumat pukul 08:00-16:00
+iptables -A INPUT -p tcp --dport 80 -m time --timestart 08:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+```
 
-### Routing
-- Routing dilakukan dengan cara static dimana next hop dari routing adalah adjacent router terdekat dengan subnet yang ingin dituju.
-- Semisal Aura ingin berkenalan dengan subnet A1 maka NID dan netmask diisi milik A1 dan next-hop nya adalah Frieren.
-- Lakukan binding everywhere (0.0.0.0) pada router sesuai dengan yang ditandai dengan panah pada gambar dibawah ini.
-  ![Alt text](Images/conowntopo.png)
-- Kemudian untuk setiap router yang terhubung dengan router lain (next hop untuk berkenalan lebih dari 1 hop) yang memiliki host/client perlu mengenali subnet mereka juga.
-- Contoh:
-  - Flamme harus berkenalan dengan subnet A1 dan A14 <br>
-  - Frieren harus berkenalan dengan subnet A1, A4, A5, A9, A14<br>
-  - Aura harus berkenalan dengan semua subnet kecuali subnet A7, A8, A11<br>
-- Binding everywhere dari setiap router cukup 1 saja yang mengarah ke router Aura / terdekat dengan Aura, hal ini dilakukan untuk efisiensi routing.
-- Jika aura sudah disetup sebagaimana pengaturan routing di atas maka otomatis semua subnet bisa saling mengenal via Aura.
-- Berikut adalah config lengkap dari masing router.
-  - Frieren<br>
-    ![Alt text](Images/rutefrieren.png)
-  - Flamme<br>
-    ![Alt text](Images/ruteflamme.png)
-  - Fern<br>
-    ![Alt text](Images/rutefern.png)
-  - Himmel<br>
-    ![Alt text](Images/rutehimmel.png)
-  - Denken<br>
-    ![Alt text](Images/rutedenken.png)
-  - Eisen<br>
-    ![Alt text](Images/ruteeisen.png)
-  - Lugner<br>
-    ![Alt text](Images/rutelugner.png)
-  - Linie<br>
-    ![Alt text](Images/rutelinie.png)
-  - Lawine<br>
-    ![Alt text](Images/rutelawine.png)
-  - Heiter<br>
-    ![Alt text](Images/ruteheiter.png)
+**Hasil**
 
-### Testing
-- Berikut adalah beberap bukti dari hasil ping antar node.<br>
-  ![Alt text](Images/outputroute.png)
+https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/92865110/bed858f6-755b-40a9-9b5f-277ff3ae39e5
 
+## Nomor 6
+Lalu, karena ternyata terdapat beberapa waktu di mana network administrator dari WebServer tidak bisa stand by, sehingga perlu ditambahkan rule bahwa akses pada hari Senin - Kamis pada jam 12.00 - 13.00 dilarang (istirahat maksi cuy) dan akses di hari Jumat pada jam 11.00 - 13.00 juga dilarang (maklum, Jumatan rek).
 
-## CIDR (Classless Inter Domain Routing)
-CIDR, atau Classless Inter-Domain Routing, adalah sebuah metode pengalamatan IP dan pengelompokan alamat IP untuk menggantikan sistem pengalamatan IP tradisional yang disebut sebagai kelas (Classful Network). CIDR diperkenalkan untuk mengatasi masalah pemborosan alamat IP yang terjadi dalam sistem kelas.
+**Penyelesaian**
+  - Konfigurasi Sein & Stark (Web Server)
+```bash
+# Larangan Akses pada hari Senin-Kamis jam 12:00 - 13:00
+iptables -A INPUT -p tcp --dport 80 -m time --timestart 12:00 --timestop 13:00 --weekdays Mon,Tue,Wed,Thu -j DROP
 
-## Topologi untuk GNS3 
-pada sesi CIDR topologi yang di gunakan adalah topologi menggunakn GNS3 yaitu : 
-![Alt text](Images/topocidr.png)
+# Larangan akses pada hari jumat pada 11:00 - 13:00
+iptables -A INPUT -p tcp --dport 80 -m time --timestart 11:00 --timestop 13:00 --weekdays Fri -j DROP
+```
 
-Grouping Subnet : 
+**Hasil**
 
-![Alt text](Images/topocidr2.jpg)
+https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/92865110/0e6f4bbb-79fb-4aae-bcb7-6623412b5be6
 
-## Subnetting 
-- Pertama tama kita gambar bagian bagian jumlah subnet yang ada pada topologi yang telah dibuat dan akan didapatkan pembagiannya sebagai berikut.
-(poto)
-- Lakukan perhitungan terhadap jumah IP pada tiap-tiap subnet yang telah dibagi.
-	Penggabungan tingkat 1
+## Nomor 7
+Karena terdapat 2 WebServer, kalian diminta agar setiap client yang mengakses Sein dengan Port 80 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan dan request dari client yang mengakses Stark dengan port 443 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan.
 
-	![Alt text](Images/cidr1.png)
+**Penyelesaian**
+  - Sein
+```bash
+# Soal 7
+iptables -A PREROUTING -t nat -p tcp -d 192.182.4.2 --dport 80 -m statistics --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.182.4.2:80
 
-	Penggabungan tingkat 2
+iptables -A PREROUTING -t nat -p tcp -d 192.182.4.2 --dport 80 -j DNAT --to-destination 192.182.0.14:80
+```
 
-	![Alt text](Images/cidr2.png)
+  - Stark
+```bash
+# Soal 7
+iptables -A PREROUTING -t nat -p tcp -d 192.182.0.4 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.182.4.2:443
 
-	Penggabungan tingkat 3
+iptables -A PREROUTING -t nat tcp -d 192.182.0.4 --dport 443 -j DNAT --to-destination 192.182.0.14:443
+```
 
-  	![Alt text](Images/cidr3.png)
-  
-  	Penggabungan tingkat 4
+## Nomor 8
+Karena berbeda koalisi politik, maka subnet dengan masyarakat yang berada pada Revolte dilarang keras mengakses WebServer hingga masa pencoblosan pemilu kepala suku 2024 berakhir. Masa pemilu (hingga pemungutan dan penghitungan suara selesai) kepala suku bersamaan dengan masa pemilu Presiden dan Wakil Presiden Indonesia 2024.
 
-  	![Alt text](Images/cidr4.png)
-  
-  	Penggabungan tingkat 5
-  
-  	![Alt text](Images/cidr5.png)
-  
-  	Penggabungan tingkat 6
-  
-  	![Alt text](Images/cidr6.png)
-  
-- Buat sebuah tree yang merepresentasikan pembagian ip dengan metode VLSM dari tiap-tiap subnet sebagaimana berikut.
-  
-	![Alt text](Images/hcidr.png)
+**Penyelesaian**
+  - Sein
+```bash
+### apabila ingin meng-drop TCP 
+iptables -A INPUT -p tcp -s 192.182.0.2 --dport 80 -m time --datestart 2023-10-19T00:00 --datestop 2024-02-15T00:00 -j DROP
 
-*Penjelasan*
-- Pada topologi Untuk melakukan perhitungan pada CIDR kita harus membagi bagi subnet mulai dari subnet yang paling bawah. Paling bawah berarti subnet yang paling jauh dari internet (gambar awan). Maka pada topologi yang digunakan, subnet yang dapat digabungkan adalah A1 dengan A2 dan subnet A7 dengan A8. Subnet yang digabung tersebut akan membentuk sebuah subnet lebih besar dari subnet-subnet kecil yang ada di dalamnya.  
-- Pada setiap bagian subnet memiliki netmask yaitu host dalam bagian subnet yang memiliki netmask yang lebih besar di naikan satu tingkat lebih besar, contoh pada Subnet `B1` yang mana terdiri dari subnet `A1` dan `A5` yang mana memiliki netmask masing masing yaitu `/21` dan `/30`, dikarenakan subnet yang yang terbesar adalah `A1` dengan netmask `/21` maka netmask nya `B1` adalah `/20`
-- Perbedaan antara pohon VLSM dengan pohon CIDR adalah ketika satu subnet diturunkan, netmask yang akan terbentuk disesuaikan dengan penggabungan subnet yang telah dilakukan sebelumnya.
-- Iterasi dilakukan terus menerus mulai dari netmask `/16` hingga `/30`
-- Sehingga pada akhirnya diperoleh pembagian IP dari tree VLSM tersebut sebagai berikut.
-![Alt text](Images/cidrper.png)
+### namun ingin drop semua, bisa digunakan :
+iptables -A INPUT -s 192.182.0.2 -m time --datestart 2023-10-19T00:00 --datestop 2024-02-15T00:00 -j DROP
+
+```
+
+<img width="632" alt="Screenshot 2023-12-16 at 01 27 30" src="https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/86884506/a9daface-4509-48d8-b2aa-5a89e1dc67b8">
+
+## Nomor 9
+Sadar akan adanya potensial saling serang antar kubu politik, maka WebServer harus dapat secara otomatis memblokir  alamat IP yang melakukan scanning port dalam jumlah banyak (maksimal 20 scan port) di dalam selang waktu 10 menit. (clue: test dengan nmap)
+
+**Penyelesaian**
+  - Sein
+```bash
+# Soal No 9
+iptables -A INPUT -p tcp --syn -m recent --name portscan --set
+iptables -A INPUT -p tcp --syn -m recent --name portscan --rcheck --seconds 600 --hitcount  20  -j  DROP
+```
+
+  - Stark
+```bash
+# Soal No 9
+iptables -N PORTSCAN
+iptables -A PORTSCAN -m recent --set --name portscan
+iptables -A PORTSCAN -m recent --update --seconds 600 --hitcount 20 --name portscan -j LOG --log-prefix "Portscan Detected: " --log-level 4
+iptables -A PORTSCAN -m recent --update --seconds 600 --hitcount 20 --name portscan -j DROP
+iptables -A INPUT -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 2/s -j ACCEPT
+iptables -A INPUT -p tcp --tcp-flags SYN,ACK,FIN,RST RST -j PORTSCAN
+```
+
+## Nomor 10
+Karena kepala suku ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
+
+**Penyelesaian**
+logging dapat ditambahkan dengan syntax iptables berikut yang dijalankan di semua node server dan router
+
+```bash
+iptables -A INPUT -j LOG --log-level debug --log-prefix "Dropped Packet: " -m limit --limit 1/second --limit-burst 10
+```
+<img width="1274" alt="Screenshot 2023-12-16 at 01 41 57" src="https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/86884506/e553caa1-af9b-4e86-b26f-70cae46fa30e">
+
+dapat dilihat, pada server sein, telah ditambahkan rules tentang log dengan prefix "paket didrop:"
