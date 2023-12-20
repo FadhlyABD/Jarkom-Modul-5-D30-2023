@@ -20,7 +20,7 @@ Lakukan pembatasan sehingga koneksi SSH pada Web Server hanya dapat dilakukan ol
 **Penyelesaian**
   - Sein & Stark (Web Server)
 ```bash
-iptables -A INPUT -p tcp --dport 22 -s 192.182.4.0/22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -s 192.206.4.0/22 -j ACCEPT
 iptables -A INPUT -p tcp --dport 22 -j DROP
 ```
 
@@ -66,17 +66,17 @@ Karena terdapat 2 WebServer, kalian diminta agar setiap client yang mengakses Se
   - Sein
 ```bash
 # Soal 7
-iptables -A PREROUTING -t nat -p tcp -d 192.182.4.2 --dport 80 -m statistics --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.182.4.2:80
+iptables -A PREROUTING -t nat -p tcp -d 192.206.4.2 --dport 80 -m statistics --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.206.4.2:80
 
-iptables -A PREROUTING -t nat -p tcp -d 192.182.4.2 --dport 80 -j DNAT --to-destination 192.182.0.14:80
+iptables -A PREROUTING -t nat -p tcp -d 192.206.4.2 --dport 80 -j DNAT --to-destination 192.206.0.14:80
 ```
 
   - Stark
 ```bash
 # Soal 7
-iptables -A PREROUTING -t nat -p tcp -d 192.182.0.4 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.182.4.2:443
+iptables -A PREROUTING -t nat -p tcp -d 192.206.0.4 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.206.4.2:443
 
-iptables -A PREROUTING -t nat tcp -d 192.182.0.4 --dport 443 -j DNAT --to-destination 192.182.0.14:443
+iptables -A PREROUTING -t nat tcp -d 192.206.0.4 --dport 443 -j DNAT --to-destination 192.206.0.14:443
 ```
 
 ## Nomor 8
@@ -86,10 +86,10 @@ Karena berbeda koalisi politik, maka subnet dengan masyarakat yang berada pada R
   - Sein
 ```bash
 ### apabila ingin meng-drop TCP 
-iptables -A INPUT -p tcp -s 192.182.0.2 --dport 80 -m time --datestart 2023-10-19T00:00 --datestop 2024-02-15T00:00 -j DROP
+iptables -A INPUT -p tcp -s 192.206.0.2 --dport 80 -m time --datestart 2023-10-19T00:00 --datestop 2024-02-15T00:00 -j DROP
 
 ### namun ingin drop semua, bisa digunakan :
-iptables -A INPUT -s 192.182.0.2 -m time --datestart 2023-10-19T00:00 --datestop 2024-02-15T00:00 -j DROP
+iptables -A INPUT -s 192.206.0.2 -m time --datestart 2023-10-19T00:00 --datestop 2024-02-15T00:00 -j DROP
 
 ```
 
