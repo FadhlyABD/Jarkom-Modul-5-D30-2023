@@ -255,9 +255,8 @@ route add -net 192.206.0.128 netmask 255.255.255.128 gw 192.206.0.22
 route add -net 192.206.0.0 netmask 255.255.255.252 gw 192.206.0.22
 ```
 
-### Soal 1
+## Nomor 1
 
-**Soal**
 Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Aura menggunakan iptables, tetapi tidak ingin menggunakan MASQUERADE.
 
 **Penjelasan**
@@ -273,11 +272,10 @@ query `ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}`  berfungsi unt
 
 Selanjutnya, untuk menyambungkan ke nat, maka kita masukkan ke NAT Table dengan POSTROUTING chain : `iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source $ETH0_IP`
 
-### No 2
-**Soal**
+## Nomor 2
 Kalian diminta untuk melakukan drop semua TCP dan UDP kecuali port 8080 pada TCP.
 
-**penjelasan**
+**Penyelesaian**
 pertama tama kita install netcat di router `Aura` terlebih dahulu dengan 
 ```
 apt-get update
@@ -295,13 +293,10 @@ lalu untuk menolak semua koneksi di udp bisa menggunakan query berikut :
 iptables -A INPUT -p udp -j DROP
 ```
 
-### No 3
-**Soal**
-
+## Nomor 3
 Kepala Suku North Area meminta kalian untuk membatasi DHCP dan DNS Server hanya dapat dilakukan ping oleh maksimal 3 device secara bersamaan, selebihnya akan di drop.
 
-**Penjelasan**
-
+**Penyelesaian**
 lakukan perintah berikut di Revolte & Richter DHCP server & DNS Server
 
 ```
@@ -325,7 +320,6 @@ iptables -A INPUT -p tcp --dport 22 -j DROP
 
 **Hasil**
 
-https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/92865110/9b49c79a-005d-4c91-a52d-65bd64e8c03c
 
 ## Nomor 5
 Selain itu, akses menuju WebServer hanya diperbolehkan saat jam kerja yaitu Senin-Jumat pada pukul 08.00-16.00.
@@ -339,7 +333,6 @@ iptables -A INPUT -p tcp --dport 80 -m time --timestart 08:00 --timestop 16:00 -
 
 **Hasil**
 
-https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/92865110/bed858f6-755b-40a9-9b5f-277ff3ae39e5
 
 ## Nomor 6
 Lalu, karena ternyata terdapat beberapa waktu di mana network administrator dari WebServer tidak bisa stand by, sehingga perlu ditambahkan rule bahwa akses pada hari Senin - Kamis pada jam 12.00 - 13.00 dilarang (istirahat maksi cuy) dan akses di hari Jumat pada jam 11.00 - 13.00 juga dilarang (maklum, Jumatan rek).
@@ -356,7 +349,6 @@ iptables -A INPUT -p tcp --dport 80 -m time --timestart 11:00 --timestop 13:00 -
 
 **Hasil**
 
-https://github.com/thoriqagfi/Jarkom-Modul-5-B08-2023/assets/92865110/0e6f4bbb-79fb-4aae-bcb7-6623412b5be6
 
 ## Nomor 7
 Karena terdapat 2 WebServer, kalian diminta agar setiap client yang mengakses Sein dengan Port 80 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan dan request dari client yang mengakses Stark dengan port 443 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan.
